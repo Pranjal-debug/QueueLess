@@ -1,0 +1,5 @@
+class: QueueStatus
+fields:
+  ticket: QueueTicket
+  position: int
+  totalWaiting: int

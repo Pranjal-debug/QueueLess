@@ -1,0 +1,9 @@
+class: QueueTicket
+table: queue_ticket
+fields:
+  customerName: String
+  ticketNumber: int
+  status: String # 'waiting', 'serving', 'completed'
+  createdAt: DateTime
+  calledAt: DateTime?
+  completedAt: DateTime?
