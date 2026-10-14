@@ -36,10 +36,12 @@ QueueLess solves this with a web-first architecture:
 
 ---
 
-## Demo
+## Live Demo
 
-- **Video Walkthrough:** [QueueLess Demo Video (Placeholder)](https://youtu.be/placeholder-demo-link)
-  *(A submission demo video `queueless_demo_final.mp4` [69 seconds, 1080p-grade framing, synchronized voiceover] is prepared locally for hackathon presentation).*
+- **Production application:** [https://queueless.serverpod.space/app/](https://queueless.serverpod.space/app/)
+  QueueLess is deployed on Serverpod Cloud. Open the live application to explore queue discovery and the customer/staff interface.
+- **Demo video:** [https://drive.google.com/file/d/11qa9hb0m0OWRDerSwINfzELVeZn0r6KR/view?usp=sharing](https://drive.google.com/file/d/11qa9hb0m0OWRDerSwINfzELVeZn0r6KR/view?usp=sharing)
+- **Source code:** [https://github.com/Pranjal-debug/QueueLess](https://github.com/Pranjal-debug/QueueLess)
 
 ---
 
