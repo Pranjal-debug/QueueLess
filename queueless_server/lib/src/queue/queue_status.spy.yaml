@@ -3,3 +3,4 @@ fields:
   ticket: QueueTicket
   position: int
   totalWaiting: int
+  estimatedWaitSeconds: int

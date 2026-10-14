@@ -1,0 +1,4 @@
+class: QueueEvent
+fields:
+  roomId: int
+  action: String # 'joined', 'called', 'completed'

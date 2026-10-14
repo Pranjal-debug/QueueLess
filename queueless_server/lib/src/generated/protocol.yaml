@@ -12,8 +12,19 @@ jwtRefresh:
 greeting:
   - hello:
 queue:
+  - bootstrapStaffRole:
+  - listRooms:
+  - createRoom:
+  - listAuthorizedRooms:
+  - getActiveSession:
+  - restartQueue:
+  - deleteRoom:
   - joinQueue:
   - getTicketStatus:
+  - cancelTicket:
   - getActiveQueue:
   - callNext:
   - completeTicket:
+  - subscribeToRoomCustomer:
+  - subscribeToRoomStaff:
+  - subscribeToRooms:

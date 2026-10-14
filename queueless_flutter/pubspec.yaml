@@ -30,6 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^8.1.0
+  qr_flutter: ^4.1.0
   queueless_client:
     path: ../queueless_client
   serverpod_auth_idp_flutter: 4.0.4

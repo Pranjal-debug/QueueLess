@@ -1,0 +1,12 @@
+class: QueueSession
+table: queue_session
+fields:
+  roomId: int, relation(parent=queue_room)
+  businessDate: String # 'YYYY-MM-DD' in Asia/Kolkata
+  sessionNumber: int
+  status: String # 'active', 'closed'
+  startedAt: DateTime
+  closedAt: DateTime?
+indexes:
+  room_session_status_idx:
+    fields: roomId, status

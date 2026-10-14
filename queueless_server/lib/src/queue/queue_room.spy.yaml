@@ -1,0 +1,6 @@
+class: QueueRoom
+table: queue_room
+fields:
+  name: String
+  createdAt: DateTime
+  deletedAt: DateTime?

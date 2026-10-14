@@ -1,45 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'client.dart';
+import 'design_system/app_theme.dart';
 import 'screens/customer_screen.dart';
+import 'screens/sign_in_screen.dart';
 import 'screens/staff_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeClient();
   runApp(const MyApp());
-}
-
-ThemeData _buildTheme(Brightness brightness) {
-  final isDark = brightness == Brightness.dark;
-  return ThemeData(
-    useMaterial3: true,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color(0xFF0F172A), // Navy blue
-      brightness: brightness,
-      primary: const Color(0xFF2563EB), // Blue
-      secondary: const Color(0xFF38BDF8), // Light blue
-      surface: isDark ? const Color(0xFF1E293B) : Colors.white,
-    ),
-    appBarTheme: AppBarTheme(
-      centerTitle: true,
-      elevation: 0,
-      backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
-      foregroundColor: isDark ? Colors.white : const Color(0xFF0F172A),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        elevation: 0,
-      ),
-    ),
-    cardTheme: CardThemeData(
-      elevation: 2,
-      shadowColor: Colors.black12,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-    ),
-  );
 }
 
 class MyApp extends StatelessWidget {
@@ -50,9 +20,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'QueueLess',
       debugShowCheckedModeBanner: false,
-      theme: _buildTheme(Brightness.light),
-      darkTheme: _buildTheme(Brightness.dark),
-      themeMode: ThemeMode.system,
+      theme: AppTheme.light(),
+      themeMode: ThemeMode.light,
       home: const MainNavigationScreen(),
     );
   }
@@ -67,35 +36,46 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
+  late final Widget _customerTab;
+  Widget? _staffTab;
 
-  final _screens = const [
-    CustomerScreen(),
-    StaffScreen(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _customerTab = const CustomerScreen();
+  }
+
+  void _selectTab(int index) {
+    if (index == 1 && _staffTab == null) {
+      // Keep protected staff content out of the tree until the user explicitly
+      // opens Staff. SignInScreen remains the authorization gate.
+      _staffTab = const SignInScreen(child: StaffScreen());
+    }
+    setState(() => _currentIndex = index);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: _screens,
+        children: [
+          _customerTab,
+          _staffTab ?? const SizedBox.shrink(),
+        ],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+        onDestinationSelected: _selectTab,
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Customer',
+            icon: Icon(Icons.confirmation_number_outlined),
+            selectedIcon: Icon(Icons.confirmation_number),
+            label: 'Join queue',
           ),
           NavigationDestination(
-            icon: Icon(Icons.admin_panel_settings_outlined),
-            selectedIcon: Icon(Icons.admin_panel_settings),
+            icon: Icon(Icons.space_dashboard_outlined),
+            selectedIcon: Icon(Icons.space_dashboard),
             label: 'Staff',
           ),
         ],

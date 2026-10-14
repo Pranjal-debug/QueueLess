@@ -11,6 +11,8 @@
 // ignore_for_file: dead_code, unnecessary_type_check
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:queueless_server/src/generated/queue/queue_room.dart'
+    as _ivigmdhl;
 import 'package:queueless_server/src/generated/queue/queue_ticket.dart'
     as _im00uu81;
 import 'package:serverpod/protocol.dart' as _isp;
@@ -20,11 +22,21 @@ import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
 import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
     as _iais;
 import 'greetings/greeting.dart' as _izw8z7ou;
+import 'queue/queue_event.dart' as _iyx8w463;
+import 'queue/queue_exception.dart' as _i2kng56s;
+import 'queue/queue_room.dart' as _izrnod2h;
+import 'queue/queue_session.dart' as _i573a6nk;
 import 'queue/queue_status.dart' as _iylzdl71;
 import 'queue/queue_ticket.dart' as _igw7xqbd;
+import 'queue/staff_room_access.dart' as _iox2zh7r;
 export 'greetings/greeting.dart';
+export 'queue/queue_event.dart';
+export 'queue/queue_exception.dart';
+export 'queue/queue_room.dart';
+export 'queue/queue_session.dart';
 export 'queue/queue_status.dart';
 export 'queue/queue_ticket.dart';
+export 'queue/staff_room_access.dart';
 
 class Protocol extends _is.DatabaseSerializationManager {
   Protocol._();
@@ -34,6 +46,125 @@ class Protocol extends _is.DatabaseSerializationManager {
   static final Protocol _instance = Protocol._().._registerHostProtocols();
 
   static List<_isp.TableDefinition> get targetTableDefinitions => [
+    _isp.TableDefinition(
+      name: 'queue_room',
+      dartName: 'QueueRoom',
+      schema: 'public',
+      module: 'queueless',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'name',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _isp.ColumnDefinition(
+          name: 'deletedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'queue_session',
+      dartName: 'QueueSession',
+      schema: 'public',
+      module: 'queueless',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'roomId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'businessDate',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'sessionNumber',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'status',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'startedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _isp.ColumnDefinition(
+          name: 'closedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'queue_session_fk_0',
+          columns: ['roomId'],
+          referenceTable: 'queue_room',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'room_session_status_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'roomId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'status',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
     _isp.TableDefinition(
       name: 'queue_ticket',
       dartName: 'QueueTicket',
@@ -49,6 +180,24 @@ class Protocol extends _is.DatabaseSerializationManager {
         ),
         _isp.ColumnDefinition(
           name: 'customerName',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'roomId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'sessionId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'accessCode',
           columnType: _isp.ColumnType.text,
           isNullable: false,
           dartType: 'String',
@@ -84,8 +233,106 @@ class Protocol extends _is.DatabaseSerializationManager {
           dartType: 'DateTime?',
         ),
       ],
-      foreignKeys: [],
-      indexes: [],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'queue_ticket_fk_0',
+          columns: ['roomId'],
+          referenceTable: 'queue_room',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'queue_ticket_fk_1',
+          columns: ['sessionId'],
+          referenceTable: 'queue_session',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'session_ticket_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'sessionId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'ticketNumber',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'staff_room_access',
+      dartName: 'StaffRoomAccess',
+      schema: 'public',
+      module: 'queueless',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'userId',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'roomId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'staff_room_access_fk_0',
+          columns: ['roomId'],
+          referenceTable: 'queue_room',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'user_room_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'userId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'roomId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
       managed: true,
     ),
     ..._iais.Protocol.targetTableDefinitions,
@@ -123,20 +370,58 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _izw8z7ou.Greeting) {
       return _izw8z7ou.Greeting.fromJson(data) as T;
     }
+    if (t == _iyx8w463.QueueEvent) {
+      return _iyx8w463.QueueEvent.fromJson(data) as T;
+    }
+    if (t == _i2kng56s.QueueException) {
+      return _i2kng56s.QueueException.fromJson(data) as T;
+    }
+    if (t == _izrnod2h.QueueRoom) {
+      return _izrnod2h.QueueRoom.fromJson(data) as T;
+    }
+    if (t == _i573a6nk.QueueSession) {
+      return _i573a6nk.QueueSession.fromJson(data) as T;
+    }
     if (t == _iylzdl71.QueueStatus) {
       return _iylzdl71.QueueStatus.fromJson(data) as T;
     }
     if (t == _igw7xqbd.QueueTicket) {
       return _igw7xqbd.QueueTicket.fromJson(data) as T;
     }
+    if (t == _iox2zh7r.StaffRoomAccess) {
+      return _iox2zh7r.StaffRoomAccess.fromJson(data) as T;
+    }
     if (t == _is.getType<_izw8z7ou.Greeting?>()) {
       return (data != null ? _izw8z7ou.Greeting.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_iyx8w463.QueueEvent?>()) {
+      return (data != null ? _iyx8w463.QueueEvent.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i2kng56s.QueueException?>()) {
+      return (data != null ? _i2kng56s.QueueException.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_izrnod2h.QueueRoom?>()) {
+      return (data != null ? _izrnod2h.QueueRoom.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i573a6nk.QueueSession?>()) {
+      return (data != null ? _i573a6nk.QueueSession.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_iylzdl71.QueueStatus?>()) {
       return (data != null ? _iylzdl71.QueueStatus.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_igw7xqbd.QueueTicket?>()) {
       return (data != null ? _igw7xqbd.QueueTicket.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_iox2zh7r.StaffRoomAccess?>()) {
+      return (data != null ? _iox2zh7r.StaffRoomAccess.fromJson(data) : null)
+          as T;
+    }
+    if (t == List<_ivigmdhl.QueueRoom>) {
+      return (data as List)
+              .map((e) => deserialize<_ivigmdhl.QueueRoom>(e))
+              .toList()
+          as T;
     }
     if (t == List<_im00uu81.QueueTicket>) {
       return (data as List)
@@ -159,8 +444,13 @@ class Protocol extends _is.DatabaseSerializationManager {
   static String? getClassNameForType(Type type) {
     return switch (type) {
       _izw8z7ou.Greeting => 'Greeting',
+      _iyx8w463.QueueEvent => 'QueueEvent',
+      _i2kng56s.QueueException => 'QueueException',
+      _izrnod2h.QueueRoom => 'QueueRoom',
+      _i573a6nk.QueueSession => 'QueueSession',
       _iylzdl71.QueueStatus => 'QueueStatus',
       _igw7xqbd.QueueTicket => 'QueueTicket',
+      _iox2zh7r.StaffRoomAccess => 'StaffRoomAccess',
       _ => null,
     };
   }
@@ -177,10 +467,20 @@ class Protocol extends _is.DatabaseSerializationManager {
     switch (data) {
       case _izw8z7ou.Greeting():
         return 'Greeting';
+      case _iyx8w463.QueueEvent():
+        return 'QueueEvent';
+      case _i2kng56s.QueueException():
+        return 'QueueException';
+      case _izrnod2h.QueueRoom():
+        return 'QueueRoom';
+      case _i573a6nk.QueueSession():
+        return 'QueueSession';
       case _iylzdl71.QueueStatus():
         return 'QueueStatus';
       case _igw7xqbd.QueueTicket():
         return 'QueueTicket';
+      case _iox2zh7r.StaffRoomAccess():
+        return 'StaffRoomAccess';
     }
     className = _iais.Protocol().getClassNameForObject(data);
     if (className != null) {
@@ -210,11 +510,26 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'Greeting') {
       return deserialize<_izw8z7ou.Greeting>(data['data']);
     }
+    if (dataClassName == 'QueueEvent') {
+      return deserialize<_iyx8w463.QueueEvent>(data['data']);
+    }
+    if (dataClassName == 'QueueException') {
+      return deserialize<_i2kng56s.QueueException>(data['data']);
+    }
+    if (dataClassName == 'QueueRoom') {
+      return deserialize<_izrnod2h.QueueRoom>(data['data']);
+    }
+    if (dataClassName == 'QueueSession') {
+      return deserialize<_i573a6nk.QueueSession>(data['data']);
+    }
     if (dataClassName == 'QueueStatus') {
       return deserialize<_iylzdl71.QueueStatus>(data['data']);
     }
     if (dataClassName == 'QueueTicket') {
       return deserialize<_igw7xqbd.QueueTicket>(data['data']);
+    }
+    if (dataClassName == 'StaffRoomAccess') {
+      return deserialize<_iox2zh7r.StaffRoomAccess>(data['data']);
     }
     if (dataClassName.startsWith('serverpod_auth_idp.')) {
       data['className'] = dataClassName.substring(19);
@@ -257,8 +572,14 @@ class Protocol extends _is.DatabaseSerializationManager {
       }
     }
     switch (t) {
+      case _izrnod2h.QueueRoom:
+        return _izrnod2h.QueueRoom.t;
+      case _i573a6nk.QueueSession:
+        return _i573a6nk.QueueSession.t;
       case _igw7xqbd.QueueTicket:
         return _igw7xqbd.QueueTicket.t;
+      case _iox2zh7r.StaffRoomAccess:
+        return _iox2zh7r.StaffRoomAccess.t;
     }
     return null;
   }

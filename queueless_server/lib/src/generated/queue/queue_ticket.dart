@@ -17,6 +17,9 @@ abstract class QueueTicket
   QueueTicket._({
     this.id,
     required this.customerName,
+    required this.roomId,
+    this.sessionId,
+    required this.accessCode,
     required this.ticketNumber,
     required this.status,
     required this.createdAt,
@@ -27,6 +30,9 @@ abstract class QueueTicket
   factory QueueTicket({
     int? id,
     required String customerName,
+    required int roomId,
+    int? sessionId,
+    required String accessCode,
     required int ticketNumber,
     required String status,
     required DateTime createdAt,
@@ -38,6 +44,9 @@ abstract class QueueTicket
     return QueueTicket(
       id: jsonSerialization['id'] as int?,
       customerName: jsonSerialization['customerName'] as String,
+      roomId: jsonSerialization['roomId'] as int,
+      sessionId: jsonSerialization['sessionId'] as int?,
+      accessCode: jsonSerialization['accessCode'] as String,
       ticketNumber: jsonSerialization['ticketNumber'] as int,
       status: jsonSerialization['status'] as String,
       createdAt: _is.DateTimeJsonExtension.fromJson(
@@ -63,6 +72,12 @@ abstract class QueueTicket
 
   String customerName;
 
+  int roomId;
+
+  int? sessionId;
+
+  String accessCode;
+
   int ticketNumber;
 
   String status;
@@ -82,6 +97,9 @@ abstract class QueueTicket
   QueueTicket copyWith({
     int? id,
     String? customerName,
+    int? roomId,
+    int? sessionId,
+    String? accessCode,
     int? ticketNumber,
     String? status,
     DateTime? createdAt,
@@ -94,6 +112,9 @@ abstract class QueueTicket
       '__className__': 'QueueTicket',
       if (id != null) 'id': id,
       'customerName': customerName,
+      'roomId': roomId,
+      if (sessionId != null) 'sessionId': sessionId,
+      'accessCode': accessCode,
       'ticketNumber': ticketNumber,
       'status': status,
       'createdAt': createdAt.toJson(),
@@ -108,6 +129,9 @@ abstract class QueueTicket
       '__className__': 'QueueTicket',
       if (id != null) 'id': id,
       'customerName': customerName,
+      'roomId': roomId,
+      if (sessionId != null) 'sessionId': sessionId,
+      'accessCode': accessCode,
       'ticketNumber': ticketNumber,
       'status': status,
       'createdAt': createdAt.toJson(),
@@ -150,6 +174,9 @@ class _QueueTicketImpl extends QueueTicket {
   _QueueTicketImpl({
     int? id,
     required String customerName,
+    required int roomId,
+    int? sessionId,
+    required String accessCode,
     required int ticketNumber,
     required String status,
     required DateTime createdAt,
@@ -158,6 +185,9 @@ class _QueueTicketImpl extends QueueTicket {
   }) : super._(
          id: id,
          customerName: customerName,
+         roomId: roomId,
+         sessionId: sessionId,
+         accessCode: accessCode,
          ticketNumber: ticketNumber,
          status: status,
          createdAt: createdAt,
@@ -172,6 +202,9 @@ class _QueueTicketImpl extends QueueTicket {
   QueueTicket copyWith({
     Object? id = _Undefined,
     String? customerName,
+    int? roomId,
+    Object? sessionId = _Undefined,
+    String? accessCode,
     int? ticketNumber,
     String? status,
     DateTime? createdAt,
@@ -181,6 +214,9 @@ class _QueueTicketImpl extends QueueTicket {
     return QueueTicket(
       id: id is int? ? id : this.id,
       customerName: customerName ?? this.customerName,
+      roomId: roomId ?? this.roomId,
+      sessionId: sessionId is int? ? sessionId : this.sessionId,
+      accessCode: accessCode ?? this.accessCode,
       ticketNumber: ticketNumber ?? this.ticketNumber,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
@@ -195,6 +231,21 @@ class QueueTicketUpdateTable extends _is.UpdateTable<QueueTicketTable> {
 
   _is.ColumnValue<String, String> customerName(String value) => _is.ColumnValue(
     table.customerName,
+    value,
+  );
+
+  _is.ColumnValue<int, int> roomId(int value) => _is.ColumnValue(
+    table.roomId,
+    value,
+  );
+
+  _is.ColumnValue<int, int> sessionId(int? value) => _is.ColumnValue(
+    table.sessionId,
+    value,
+  );
+
+  _is.ColumnValue<String, String> accessCode(String value) => _is.ColumnValue(
+    table.accessCode,
     value,
   );
 
@@ -234,6 +285,18 @@ class QueueTicketTable extends _is.Table<int?> {
       'customerName',
       this,
     );
+    roomId = _is.ColumnInt(
+      'roomId',
+      this,
+    );
+    sessionId = _is.ColumnInt(
+      'sessionId',
+      this,
+    );
+    accessCode = _is.ColumnString(
+      'accessCode',
+      this,
+    );
     ticketNumber = _is.ColumnInt(
       'ticketNumber',
       this,
@@ -260,6 +323,12 @@ class QueueTicketTable extends _is.Table<int?> {
 
   late final _is.ColumnString customerName;
 
+  late final _is.ColumnInt roomId;
+
+  late final _is.ColumnInt sessionId;
+
+  late final _is.ColumnString accessCode;
+
   late final _is.ColumnInt ticketNumber;
 
   late final _is.ColumnString status;
@@ -274,6 +343,9 @@ class QueueTicketTable extends _is.Table<int?> {
   List<_is.Column> get columns => [
     id,
     customerName,
+    roomId,
+    sessionId,
+    accessCode,
     ticketNumber,
     status,
     createdAt,

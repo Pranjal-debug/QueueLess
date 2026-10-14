@@ -14,6 +14,12 @@ import 'dart:async' as _ida;
 import 'package:http/http.dart' as _i85jenna;
 import 'package:queueless_client/src/protocol/greetings/greeting.dart'
     as _i9nnokya;
+import 'package:queueless_client/src/protocol/queue/queue_event.dart'
+    as _i900e7tr;
+import 'package:queueless_client/src/protocol/queue/queue_room.dart'
+    as _ircwtnoc;
+import 'package:queueless_client/src/protocol/queue/queue_session.dart'
+    as _im9s5reg;
 import 'package:queueless_client/src/protocol/queue/queue_status.dart'
     as _i3ewmjui;
 import 'package:queueless_client/src/protocol/queue/queue_ticket.dart'
@@ -275,36 +281,124 @@ class EndpointQueue extends _isc.EndpointRef {
   @override
   String get name => 'queue';
 
-  /// Join the queue. Returns the created ticket and its position.
-  _ida.Future<_i3ewmjui.QueueStatus> joinQueue(String customerName) =>
-      caller.callServerEndpoint<_i3ewmjui.QueueStatus>(
+  /// Separate, idempotent, concurrency-safe role bootstrap for authenticated accounts
+  /// that are missing the staff scope.
+  _ida.Future<bool> bootstrapStaffRole() => caller.callServerEndpoint<bool>(
+    'queue',
+    'bootstrapStaffRole',
+    {},
+  );
+
+  /// List all active, non-deleted queue rooms.
+  _ida.Future<List<_ircwtnoc.QueueRoom>> listRooms() =>
+      caller.callServerEndpoint<List<_ircwtnoc.QueueRoom>>(
         'queue',
-        'joinQueue',
-        {'customerName': customerName},
+        'listRooms',
+        {},
       );
+
+  /// Create a room for an authenticated staff member and grant that member
+  /// access in the same transaction as the room insert.
+  _ida.Future<_ircwtnoc.QueueRoom> createRoom(String roomName) =>
+      caller.callServerEndpoint<_ircwtnoc.QueueRoom>(
+        'queue',
+        'createRoom',
+        {'roomName': roomName},
+      );
+
+  /// List active rooms the signed-in staff is authorized to access.
+  _ida.Future<List<_ircwtnoc.QueueRoom>> listAuthorizedRooms() =>
+      caller.callServerEndpoint<List<_ircwtnoc.QueueRoom>>(
+        'queue',
+        'listAuthorizedRooms',
+        {},
+      );
+
+  /// Get the current active session for [roomId], triggering rollover if date changed.
+  _ida.Future<_im9s5reg.QueueSession> getActiveSession(
+    int roomId, {
+    DateTime? referenceTime,
+  }) => caller.callServerEndpoint<_im9s5reg.QueueSession>(
+    'queue',
+    'getActiveSession',
+    {
+      'roomId': roomId,
+      'referenceTime': referenceTime,
+    },
+  );
+
+  /// Restart the queue session for the specified room.
+  /// Closes the existing active session and its waiting/serving tickets (cancelled),
+  /// and atomically creates a new active session with ticket numbering starting at #1.
+  _ida.Future<_im9s5reg.QueueSession> restartQueue(int roomId) =>
+      caller.callServerEndpoint<_im9s5reg.QueueSession>(
+        'queue',
+        'restartQueue',
+        {'roomId': roomId},
+      );
+
+  /// Safely soft-deletes a room.
+  /// Requires staff authorization. Closes the active session, cancels any active tickets,
+  /// and sets deletedAt timestamp. Historical tickets and room data are preserved.
+  _ida.Future<bool> deleteRoom(int roomId) => caller.callServerEndpoint<bool>(
+    'queue',
+    'deleteRoom',
+    {'roomId': roomId},
+  );
+
+  /// Join the queue. Returns the created ticket and its position.
+  _ida.Future<_i3ewmjui.QueueStatus> joinQueue(
+    String customerName, {
+    int? roomId,
+  }) => caller.callServerEndpoint<_i3ewmjui.QueueStatus>(
+    'queue',
+    'joinQueue',
+    {
+      'customerName': customerName,
+      'roomId': roomId,
+    },
+  );
 
   /// Get the status of a specific ticket.
-  _ida.Future<_i3ewmjui.QueueStatus?> getTicketStatus(int ticketId) =>
-      caller.callServerEndpoint<_i3ewmjui.QueueStatus?>(
-        'queue',
-        'getTicketStatus',
-        {'ticketId': ticketId},
-      );
+  _ida.Future<_i3ewmjui.QueueStatus?> getTicketStatus(
+    int ticketId,
+    String accessCode,
+  ) => caller.callServerEndpoint<_i3ewmjui.QueueStatus?>(
+    'queue',
+    'getTicketStatus',
+    {
+      'ticketId': ticketId,
+      'accessCode': accessCode,
+    },
+  );
 
-  /// Returns currently waiting and serving tickets ordered by ticket number.
-  _ida.Future<List<_i3l0aei0.QueueTicket>> getActiveQueue() =>
+  /// Cancel a customer's waiting ticket.
+  _ida.Future<_i3ewmjui.QueueStatus> cancelTicket(
+    int ticketId,
+    String accessCode,
+  ) => caller.callServerEndpoint<_i3ewmjui.QueueStatus>(
+    'queue',
+    'cancelTicket',
+    {
+      'ticketId': ticketId,
+      'accessCode': accessCode,
+    },
+  );
+
+  /// Returns currently waiting and serving tickets for the current session ordered by ticket number.
+  _ida.Future<List<_i3l0aei0.QueueTicket>> getActiveQueue({int? roomId}) =>
       caller.callServerEndpoint<List<_i3l0aei0.QueueTicket>>(
         'queue',
         'getActiveQueue',
-        {},
+        {'roomId': roomId},
       );
 
-  /// Call the next waiting customer.
-  _ida.Future<_i3l0aei0.QueueTicket?> callNext() =>
+  /// Call the next waiting customer in the active session.
+  _ida.Future<_i3l0aei0.QueueTicket?> callNext({int? roomId}) =>
       caller.callServerEndpoint<_i3l0aei0.QueueTicket?>(
         'queue',
         'callNext',
-        {},
+        {'roomId': roomId},
       );
 
   /// Complete a ticket that is currently being served.
@@ -313,6 +407,48 @@ class EndpointQueue extends _isc.EndpointRef {
         'queue',
         'completeTicket',
         {'ticketId': ticketId},
+      );
+
+  /// Subscribe to real-time events for a specific room as a customer.
+  _ida.Stream<_i900e7tr.QueueEvent> subscribeToRoomCustomer(
+    int ticketId,
+    String accessCode,
+  ) =>
+      caller.callStreamingServerEndpoint<
+        _ida.Stream<_i900e7tr.QueueEvent>,
+        _i900e7tr.QueueEvent
+      >(
+        'queue',
+        'subscribeToRoomCustomer',
+        {
+          'ticketId': ticketId,
+          'accessCode': accessCode,
+        },
+        {},
+      );
+
+  /// Subscribe to real-time events for a specific room as staff.
+  _ida.Stream<_i900e7tr.QueueEvent> subscribeToRoomStaff({int? roomId}) =>
+      caller.callStreamingServerEndpoint<
+        _ida.Stream<_i900e7tr.QueueEvent>,
+        _i900e7tr.QueueEvent
+      >(
+        'queue',
+        'subscribeToRoomStaff',
+        {'roomId': roomId},
+        {},
+      );
+
+  /// Subscribe to public room list changes (e.g., room created or deleted).
+  _ida.Stream<_i900e7tr.QueueEvent> subscribeToRooms() =>
+      caller.callStreamingServerEndpoint<
+        _ida.Stream<_i900e7tr.QueueEvent>,
+        _i900e7tr.QueueEvent
+      >(
+        'queue',
+        'subscribeToRooms',
+        {},
+        {},
       );
 }
 

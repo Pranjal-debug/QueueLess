@@ -15,6 +15,12 @@ import 'dart:async' as _ida;
 import 'dart:io' as _idi;
 import 'package:queueless_server/src/generated/greetings/greeting.dart'
     as _irylqxt0;
+import 'package:queueless_server/src/generated/queue/queue_event.dart'
+    as _iehg5bqa;
+import 'package:queueless_server/src/generated/queue/queue_room.dart'
+    as _ivigmdhl;
+import 'package:queueless_server/src/generated/queue/queue_session.dart'
+    as _iljtan21;
 import 'package:queueless_server/src/generated/queue/queue_status.dart'
     as _ipvi2a5i;
 import 'package:queueless_server/src/generated/queue/queue_ticket.dart'
@@ -561,10 +567,229 @@ class _QueueEndpoint {
 
   final _is.SerializationManager _serializationManager;
 
+  _ida.Future<bool> bootstrapStaffRole(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'queue',
+            method: 'bootstrapStaffRole',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'queue',
+          methodName: 'bootstrapStaffRole',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<bool>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_ivigmdhl.QueueRoom>> listRooms(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'queue',
+            method: 'listRooms',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'queue',
+          methodName: 'listRooms',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_ivigmdhl.QueueRoom>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ivigmdhl.QueueRoom> createRoom(
+    _ist.TestSessionBuilder sessionBuilder,
+    String roomName,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'queue',
+            method: 'createRoom',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'queue',
+          methodName: 'createRoom',
+          parameters: _ist.testObjectToJson({'roomName': roomName}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ivigmdhl.QueueRoom>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_ivigmdhl.QueueRoom>> listAuthorizedRooms(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'queue',
+            method: 'listAuthorizedRooms',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'queue',
+          methodName: 'listAuthorizedRooms',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_ivigmdhl.QueueRoom>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iljtan21.QueueSession> getActiveSession(
+    _ist.TestSessionBuilder sessionBuilder,
+    int roomId, {
+    DateTime? referenceTime,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'queue',
+            method: 'getActiveSession',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'queue',
+          methodName: 'getActiveSession',
+          parameters: _ist.testObjectToJson({
+            'roomId': roomId,
+            'referenceTime': referenceTime,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iljtan21.QueueSession>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iljtan21.QueueSession> restartQueue(
+    _ist.TestSessionBuilder sessionBuilder,
+    int roomId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'queue',
+            method: 'restartQueue',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'queue',
+          methodName: 'restartQueue',
+          parameters: _ist.testObjectToJson({'roomId': roomId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iljtan21.QueueSession>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<bool> deleteRoom(
+    _ist.TestSessionBuilder sessionBuilder,
+    int roomId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'queue',
+            method: 'deleteRoom',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'queue',
+          methodName: 'deleteRoom',
+          parameters: _ist.testObjectToJson({'roomId': roomId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<bool>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _ida.Future<_ipvi2a5i.QueueStatus> joinQueue(
     _ist.TestSessionBuilder sessionBuilder,
-    String customerName,
-  ) async {
+    String customerName, {
+    int? roomId,
+  }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
           (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
@@ -576,7 +801,10 @@ class _QueueEndpoint {
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'queue',
           methodName: 'joinQueue',
-          parameters: _ist.testObjectToJson({'customerName': customerName}),
+          parameters: _ist.testObjectToJson({
+            'customerName': customerName,
+            'roomId': roomId,
+          }),
           serializationManager: _serializationManager,
         );
         var _localReturnValue =
@@ -595,6 +823,7 @@ class _QueueEndpoint {
   _ida.Future<_ipvi2a5i.QueueStatus?> getTicketStatus(
     _ist.TestSessionBuilder sessionBuilder,
     int ticketId,
+    String accessCode,
   ) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -607,7 +836,10 @@ class _QueueEndpoint {
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'queue',
           methodName: 'getTicketStatus',
-          parameters: _ist.testObjectToJson({'ticketId': ticketId}),
+          parameters: _ist.testObjectToJson({
+            'ticketId': ticketId,
+            'accessCode': accessCode,
+          }),
           serializationManager: _serializationManager,
         );
         var _localReturnValue =
@@ -623,9 +855,45 @@ class _QueueEndpoint {
     });
   }
 
-  _ida.Future<List<_im00uu81.QueueTicket>> getActiveQueue(
+  _ida.Future<_ipvi2a5i.QueueStatus> cancelTicket(
     _ist.TestSessionBuilder sessionBuilder,
+    int ticketId,
+    String accessCode,
   ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'queue',
+            method: 'cancelTicket',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'queue',
+          methodName: 'cancelTicket',
+          parameters: _ist.testObjectToJson({
+            'ticketId': ticketId,
+            'accessCode': accessCode,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ipvi2a5i.QueueStatus>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_im00uu81.QueueTicket>> getActiveQueue(
+    _ist.TestSessionBuilder sessionBuilder, {
+    int? roomId,
+  }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
           (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
@@ -637,7 +905,7 @@ class _QueueEndpoint {
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'queue',
           methodName: 'getActiveQueue',
-          parameters: _ist.testObjectToJson({}),
+          parameters: _ist.testObjectToJson({'roomId': roomId}),
           serializationManager: _serializationManager,
         );
         var _localReturnValue =
@@ -654,8 +922,9 @@ class _QueueEndpoint {
   }
 
   _ida.Future<_im00uu81.QueueTicket?> callNext(
-    _ist.TestSessionBuilder sessionBuilder,
-  ) async {
+    _ist.TestSessionBuilder sessionBuilder, {
+    int? roomId,
+  }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
           (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
@@ -667,7 +936,7 @@ class _QueueEndpoint {
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'queue',
           methodName: 'callNext',
-          parameters: _ist.testObjectToJson({}),
+          parameters: _ist.testObjectToJson({'roomId': roomId}),
           serializationManager: _serializationManager,
         );
         var _localReturnValue =
@@ -712,5 +981,107 @@ class _QueueEndpoint {
         await _localUniqueSession.close();
       }
     });
+  }
+
+  _ida.Stream<_iehg5bqa.QueueEvent> subscribeToRoomCustomer(
+    _ist.TestSessionBuilder sessionBuilder,
+    int ticketId,
+    String accessCode,
+  ) {
+    var _localTestStreamManager =
+        _ist.TestStreamManager<_iehg5bqa.QueueEvent>();
+    _ist.callStreamFunctionAndHandleExceptions(
+      () async {
+        var _localUniqueSession =
+            (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+              endpoint: 'queue',
+              method: 'subscribeToRoomCustomer',
+            );
+        var _localCallContext = await _endpointDispatch
+            .getMethodStreamCallContext(
+              createSessionCallback: (_) => _localUniqueSession,
+              endpointPath: 'queue',
+              methodName: 'subscribeToRoomCustomer',
+              arguments: {
+                'ticketId': ticketId,
+                'accessCode': accessCode,
+              },
+              requestedInputStreams: [],
+              serializationManager: _serializationManager,
+            );
+        await _localTestStreamManager.callStreamMethod(
+          _localCallContext,
+          _localUniqueSession,
+          {},
+        );
+      },
+      _localTestStreamManager.outputStreamController,
+    );
+    return _localTestStreamManager.outputStreamController.stream;
+  }
+
+  _ida.Stream<_iehg5bqa.QueueEvent> subscribeToRoomStaff(
+    _ist.TestSessionBuilder sessionBuilder, {
+    int? roomId,
+  }) {
+    var _localTestStreamManager =
+        _ist.TestStreamManager<_iehg5bqa.QueueEvent>();
+    _ist.callStreamFunctionAndHandleExceptions(
+      () async {
+        var _localUniqueSession =
+            (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+              endpoint: 'queue',
+              method: 'subscribeToRoomStaff',
+            );
+        var _localCallContext = await _endpointDispatch
+            .getMethodStreamCallContext(
+              createSessionCallback: (_) => _localUniqueSession,
+              endpointPath: 'queue',
+              methodName: 'subscribeToRoomStaff',
+              arguments: {'roomId': roomId},
+              requestedInputStreams: [],
+              serializationManager: _serializationManager,
+            );
+        await _localTestStreamManager.callStreamMethod(
+          _localCallContext,
+          _localUniqueSession,
+          {},
+        );
+      },
+      _localTestStreamManager.outputStreamController,
+    );
+    return _localTestStreamManager.outputStreamController.stream;
+  }
+
+  _ida.Stream<_iehg5bqa.QueueEvent> subscribeToRooms(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) {
+    var _localTestStreamManager =
+        _ist.TestStreamManager<_iehg5bqa.QueueEvent>();
+    _ist.callStreamFunctionAndHandleExceptions(
+      () async {
+        var _localUniqueSession =
+            (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+              endpoint: 'queue',
+              method: 'subscribeToRooms',
+            );
+        var _localCallContext = await _endpointDispatch
+            .getMethodStreamCallContext(
+              createSessionCallback: (_) => _localUniqueSession,
+              endpointPath: 'queue',
+              methodName: 'subscribeToRooms',
+              arguments: {},
+              requestedInputStreams: [],
+              serializationManager: _serializationManager,
+            );
+        await _localTestStreamManager.callStreamMethod(
+          _localCallContext,
+          _localUniqueSession,
+          {},
+        );
+      },
+      _localTestStreamManager.outputStreamController,
+    );
+    return _localTestStreamManager.outputStreamController.stream;
   }
 }

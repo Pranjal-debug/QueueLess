@@ -2,8 +2,15 @@ class: QueueTicket
 table: queue_ticket
 fields:
   customerName: String
+  roomId: int, relation(parent=queue_room)
+  sessionId: int?, relation(parent=queue_session)
+  accessCode: String
   ticketNumber: int
-  status: String # 'waiting', 'serving', 'completed'
+  status: String # 'waiting', 'serving', 'completed', 'cancelled'
   createdAt: DateTime
   calledAt: DateTime?
   completedAt: DateTime?
+indexes:
+  session_ticket_idx:
+    fields: sessionId, ticketNumber
+    unique: true

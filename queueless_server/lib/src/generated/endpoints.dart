@@ -284,6 +284,118 @@ class Endpoints extends _is.EndpointDispatch {
       name: 'queue',
       endpoint: endpoints['queue']!,
       methodConnectors: {
+        'bootstrapStaffRole': _is.MethodConnector(
+          name: 'bootstrapStaffRole',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['queue'] as _i2z3iif3.QueueEndpoint)
+                  .bootstrapStaffRole(session),
+        ),
+        'listRooms': _is.MethodConnector(
+          name: 'listRooms',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['queue'] as _i2z3iif3.QueueEndpoint)
+                  .listRooms(session),
+        ),
+        'createRoom': _is.MethodConnector(
+          name: 'createRoom',
+          params: {
+            'roomName': _is.ParameterDescription(
+              name: 'roomName',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['queue'] as _i2z3iif3.QueueEndpoint).createRoom(
+                    session,
+                    params['roomName'],
+                  ),
+        ),
+        'listAuthorizedRooms': _is.MethodConnector(
+          name: 'listAuthorizedRooms',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['queue'] as _i2z3iif3.QueueEndpoint)
+                  .listAuthorizedRooms(session),
+        ),
+        'getActiveSession': _is.MethodConnector(
+          name: 'getActiveSession',
+          params: {
+            'roomId': _is.ParameterDescription(
+              name: 'roomId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'referenceTime': _is.ParameterDescription(
+              name: 'referenceTime',
+              type: _is.getType<DateTime?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['queue'] as _i2z3iif3.QueueEndpoint)
+                  .getActiveSession(
+                    session,
+                    params['roomId'],
+                    referenceTime: params['referenceTime'],
+                  ),
+        ),
+        'restartQueue': _is.MethodConnector(
+          name: 'restartQueue',
+          params: {
+            'roomId': _is.ParameterDescription(
+              name: 'roomId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['queue'] as _i2z3iif3.QueueEndpoint).restartQueue(
+                    session,
+                    params['roomId'],
+                  ),
+        ),
+        'deleteRoom': _is.MethodConnector(
+          name: 'deleteRoom',
+          params: {
+            'roomId': _is.ParameterDescription(
+              name: 'roomId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['queue'] as _i2z3iif3.QueueEndpoint).deleteRoom(
+                    session,
+                    params['roomId'],
+                  ),
+        ),
         'joinQueue': _is.MethodConnector(
           name: 'joinQueue',
           params: {
@@ -291,6 +403,11 @@ class Endpoints extends _is.EndpointDispatch {
               name: 'customerName',
               type: _is.getType<String>(),
               nullable: false,
+            ),
+            'roomId': _is.ParameterDescription(
+              name: 'roomId',
+              type: _is.getType<int?>(),
+              nullable: true,
             ),
           },
           call:
@@ -301,6 +418,7 @@ class Endpoints extends _is.EndpointDispatch {
                   (endpoints['queue'] as _i2z3iif3.QueueEndpoint).joinQueue(
                     session,
                     params['customerName'],
+                    roomId: params['roomId'],
                   ),
         ),
         'getTicketStatus': _is.MethodConnector(
@@ -309,6 +427,11 @@ class Endpoints extends _is.EndpointDispatch {
             'ticketId': _is.ParameterDescription(
               name: 'ticketId',
               type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'accessCode': _is.ParameterDescription(
+              name: 'accessCode',
+              type: _is.getType<String>(),
               nullable: false,
             ),
           },
@@ -320,27 +443,71 @@ class Endpoints extends _is.EndpointDispatch {
                   .getTicketStatus(
                     session,
                     params['ticketId'],
+                    params['accessCode'],
+                  ),
+        ),
+        'cancelTicket': _is.MethodConnector(
+          name: 'cancelTicket',
+          params: {
+            'ticketId': _is.ParameterDescription(
+              name: 'ticketId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'accessCode': _is.ParameterDescription(
+              name: 'accessCode',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['queue'] as _i2z3iif3.QueueEndpoint).cancelTicket(
+                    session,
+                    params['ticketId'],
+                    params['accessCode'],
                   ),
         ),
         'getActiveQueue': _is.MethodConnector(
           name: 'getActiveQueue',
-          params: {},
+          params: {
+            'roomId': _is.ParameterDescription(
+              name: 'roomId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
           call:
               (
                 _is.Session session,
                 Map<String, dynamic> params,
               ) async => (endpoints['queue'] as _i2z3iif3.QueueEndpoint)
-                  .getActiveQueue(session),
+                  .getActiveQueue(
+                    session,
+                    roomId: params['roomId'],
+                  ),
         ),
         'callNext': _is.MethodConnector(
           name: 'callNext',
-          params: {},
+          params: {
+            'roomId': _is.ParameterDescription(
+              name: 'roomId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
           call:
               (
                 _is.Session session,
                 Map<String, dynamic> params,
-              ) async => (endpoints['queue'] as _i2z3iif3.QueueEndpoint)
-                  .callNext(session),
+              ) async =>
+                  (endpoints['queue'] as _i2z3iif3.QueueEndpoint).callNext(
+                    session,
+                    roomId: params['roomId'],
+                  ),
         ),
         'completeTicket': _is.MethodConnector(
           name: 'completeTicket',
@@ -360,6 +527,69 @@ class Endpoints extends _is.EndpointDispatch {
                     session,
                     params['ticketId'],
                   ),
+        ),
+        'subscribeToRoomCustomer': _is.MethodStreamConnector(
+          name: 'subscribeToRoomCustomer',
+          params: {
+            'ticketId': _is.ParameterDescription(
+              name: 'ticketId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'accessCode': _is.ParameterDescription(
+              name: 'accessCode',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          streamParams: {},
+          returnType: _is.MethodStreamReturnType.streamType,
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+                Map<String, Stream> streamParams,
+              ) => (endpoints['queue'] as _i2z3iif3.QueueEndpoint)
+                  .subscribeToRoomCustomer(
+                    session,
+                    params['ticketId'],
+                    params['accessCode'],
+                  ),
+        ),
+        'subscribeToRoomStaff': _is.MethodStreamConnector(
+          name: 'subscribeToRoomStaff',
+          params: {
+            'roomId': _is.ParameterDescription(
+              name: 'roomId',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          streamParams: {},
+          returnType: _is.MethodStreamReturnType.streamType,
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+                Map<String, Stream> streamParams,
+              ) => (endpoints['queue'] as _i2z3iif3.QueueEndpoint)
+                  .subscribeToRoomStaff(
+                    session,
+                    roomId: params['roomId'],
+                  ),
+        ),
+        'subscribeToRooms': _is.MethodStreamConnector(
+          name: 'subscribeToRooms',
+          params: {},
+          streamParams: {},
+          returnType: _is.MethodStreamReturnType.streamType,
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+                Map<String, Stream> streamParams,
+              ) => (endpoints['queue'] as _i2z3iif3.QueueEndpoint)
+                  .subscribeToRooms(session),
         ),
       },
     );

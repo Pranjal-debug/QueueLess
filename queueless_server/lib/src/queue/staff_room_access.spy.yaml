@@ -1,0 +1,9 @@
+class: StaffRoomAccess
+table: staff_room_access
+fields:
+  userId: String
+  roomId: int, relation(parent=queue_room)
+indexes:
+  user_room_idx:
+    fields: userId, roomId
+    unique: true

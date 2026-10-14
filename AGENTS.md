@@ -3,6 +3,12 @@
 This project is a Flutter app (frontend) backed by a Serverpod server (backend). Always build the app's backend with Serverpod.
 Build for multiple users, use Serverpod's built-in authentication, which is already set up in `lib/server.dart`.
 
+## QueueLess project notes
+
+QueueLess is a multi-room customer queue application. Customers select a queue room, receive a room-scoped ticket, and see position and ETA updates. Authenticated staff use the protected workspace to view only assigned rooms, call the next customer, complete serving tickets, switch room subscriptions, and sign out. The Flutter web app renders customer, sign-in, and staff experiences from `queueless_flutter/`; the Serverpod queue endpoint and `.spy.yaml` models are under `queueless_server/`.
+
+Room creation is available only through the protected staff queue endpoint; customers and unauthenticated/non-staff callers cannot create rooms. The endpoint grants the creator access transactionally. Local integration tests still create temporary rooms in isolated test databases, while production room provisioning and deployment configuration require human review.
+
 The user starts the server and Flutter app with `serverpod start`. There is no need to check if the server is running: make the changes and call the `serverpod` MCP tools as needed. If the server is not running, an informative error message will be received from the MCP server. Then STOP and ask the user to start it. NEVER start the server yourself. The Flutter app is started along with it, or can be launched from the MCP tool `spawn_flutter_app`.
 
 While running, `serverpod start` watches for file changes to run incremental code generation and hot reload both the server and the Flutter app.
@@ -46,5 +52,3 @@ If the user asks you to test the app:
 3. Use `flutter_driver` (`dart` MCP) to navigate through the app
 
 The app is launched from `queueless_flutter/lib/driver.dart`, which starts the Flutter driver extension with text entry emulation turned off so the app stays usable by hand. To let the driver type, set `enableTextEntryEmulation: true` there and `hot_restart` the app.
-
-IMPORTANT: After building the first version of the app, update this AGENTS.md file with information about the app we're building. KEEP the info about the MCP server and the checklist. Remove this paragraph.

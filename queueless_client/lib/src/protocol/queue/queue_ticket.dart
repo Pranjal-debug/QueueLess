@@ -17,6 +17,9 @@ abstract class QueueTicket
   QueueTicket._({
     this.id,
     required this.customerName,
+    required this.roomId,
+    this.sessionId,
+    required this.accessCode,
     required this.ticketNumber,
     required this.status,
     required this.createdAt,
@@ -27,6 +30,9 @@ abstract class QueueTicket
   factory QueueTicket({
     int? id,
     required String customerName,
+    required int roomId,
+    int? sessionId,
+    required String accessCode,
     required int ticketNumber,
     required String status,
     required DateTime createdAt,
@@ -38,6 +44,9 @@ abstract class QueueTicket
     return QueueTicket(
       id: jsonSerialization['id'] as int?,
       customerName: jsonSerialization['customerName'] as String,
+      roomId: jsonSerialization['roomId'] as int,
+      sessionId: jsonSerialization['sessionId'] as int?,
+      accessCode: jsonSerialization['accessCode'] as String,
       ticketNumber: jsonSerialization['ticketNumber'] as int,
       status: jsonSerialization['status'] as String,
       createdAt: _isc.DateTimeJsonExtension.fromJson(
@@ -61,6 +70,12 @@ abstract class QueueTicket
 
   String customerName;
 
+  int roomId;
+
+  int? sessionId;
+
+  String accessCode;
+
   int ticketNumber;
 
   String status;
@@ -77,6 +92,9 @@ abstract class QueueTicket
   QueueTicket copyWith({
     int? id,
     String? customerName,
+    int? roomId,
+    int? sessionId,
+    String? accessCode,
     int? ticketNumber,
     String? status,
     DateTime? createdAt,
@@ -89,6 +107,9 @@ abstract class QueueTicket
       '__className__': 'QueueTicket',
       if (id != null) 'id': id,
       'customerName': customerName,
+      'roomId': roomId,
+      if (sessionId != null) 'sessionId': sessionId,
+      'accessCode': accessCode,
       'ticketNumber': ticketNumber,
       'status': status,
       'createdAt': createdAt.toJson(),
@@ -103,6 +124,9 @@ abstract class QueueTicket
       '__className__': 'QueueTicket',
       if (id != null) 'id': id,
       'customerName': customerName,
+      'roomId': roomId,
+      if (sessionId != null) 'sessionId': sessionId,
+      'accessCode': accessCode,
       'ticketNumber': ticketNumber,
       'status': status,
       'createdAt': createdAt.toJson(),
@@ -123,6 +147,9 @@ class _QueueTicketImpl extends QueueTicket {
   _QueueTicketImpl({
     int? id,
     required String customerName,
+    required int roomId,
+    int? sessionId,
+    required String accessCode,
     required int ticketNumber,
     required String status,
     required DateTime createdAt,
@@ -131,6 +158,9 @@ class _QueueTicketImpl extends QueueTicket {
   }) : super._(
          id: id,
          customerName: customerName,
+         roomId: roomId,
+         sessionId: sessionId,
+         accessCode: accessCode,
          ticketNumber: ticketNumber,
          status: status,
          createdAt: createdAt,
@@ -145,6 +175,9 @@ class _QueueTicketImpl extends QueueTicket {
   QueueTicket copyWith({
     Object? id = _Undefined,
     String? customerName,
+    int? roomId,
+    Object? sessionId = _Undefined,
+    String? accessCode,
     int? ticketNumber,
     String? status,
     DateTime? createdAt,
@@ -154,6 +187,9 @@ class _QueueTicketImpl extends QueueTicket {
     return QueueTicket(
       id: id is int? ? id : this.id,
       customerName: customerName ?? this.customerName,
+      roomId: roomId ?? this.roomId,
+      sessionId: sessionId is int? ? sessionId : this.sessionId,
+      accessCode: accessCode ?? this.accessCode,
       ticketNumber: ticketNumber ?? this.ticketNumber,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,

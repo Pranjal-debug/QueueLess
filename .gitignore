@@ -1,19 +1,105 @@
-# Files and directories created by pub
+# ==============================================================================
+# QueueLess — Repository Git Ignore Rules
+# ==============================================================================
+
+# --- Dart / Flutter / Pub Build Outputs & Dependencies ---
 .dart_tool/
 .packages
-
-# Pubspec overrides
+.pub/
+.pub-cache/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+**/build/
+**/ephemeral/
 pubspec_overrides.yaml
 
-# Agents
+# --- Symbol & Obfuscation Maps ---
+*.symbols
+*.map.json
+
+# --- Documentation Artifacts ---
+doc/api/
+**/doc/api/
+
+# --- Serverpod Secrets, Runtime & Cloud CLI ---
+**/config/passwords.yaml
+!**/config/passwords.yaml.example
+**/config/firebase_service_account_key.json
+.serverpod/
+**/.serverpod/
+.scloud/
+web/app
+
+# --- Database Dumps, Ephemeral DBs & Scratch Queries ---
+**/*.dump
+**/db_backups/
+**/sp_*.db*
+check_accounts.sql
+check_scopes.sql
+
+# --- Operating System & Temporary Files ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+nul
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# --- IDE & Editor State ---
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/settings.json
+.vscode/mcp.json
+.mcp.json
+
+# --- AI Agents & Local Tooling Roots ---
 .dart_skills/
 .agents/
 .claude/
 .gemini/
 .cursor/
-.vscode/mcp.json
 .codex/
-.mcp.json
+__agent__/
 
-# Serverpod Cloud CLI
-.scloud/
+# --- Local Demo Media & Raw Screen Recordings ---
+*.mp4
+*.webp
+*.mov
+*.avi
+*.mp3
+*.wav
+demo_player.html
+demo_package/recordings/
+
+# --- Local Diagnostic Scripts & Phase Reports ---
+queueless_server/check_auth.dart
+queueless_server/create_test_account.dart
+queueless_server/find_auth.dart
+queueless_server/inspect_db.dart
+queueless_server/test_config.dart
+queueless_server/test_e2e.dart
+queueless_server/test_fields.dart
+queueless_server/test_import.dart
+queueless_server/test_operator.dart
+queueless_server/test_queue.dart
+queueless_flutter/test_client_signup.dart
+
+AUDIT_REPORT.md
+PHASE_*.md
+PRODUCTION_MIGRATION_PLAYBOOK.md
+REPAIR_PHASE_1_2_REPORT.md
+video_final_qc_report.md

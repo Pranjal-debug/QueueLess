@@ -20,12 +20,14 @@ abstract class QueueStatus
     required this.ticket,
     required this.position,
     required this.totalWaiting,
+    required this.estimatedWaitSeconds,
   });
 
   factory QueueStatus({
     required _i8nm8tqe.QueueTicket ticket,
     required int position,
     required int totalWaiting,
+    required int estimatedWaitSeconds,
   }) = _QueueStatusImpl;
 
   factory QueueStatus.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -35,6 +37,7 @@ abstract class QueueStatus
       ),
       position: jsonSerialization['position'] as int,
       totalWaiting: jsonSerialization['totalWaiting'] as int,
+      estimatedWaitSeconds: jsonSerialization['estimatedWaitSeconds'] as int,
     );
   }
 
@@ -44,6 +47,8 @@ abstract class QueueStatus
 
   int totalWaiting;
 
+  int estimatedWaitSeconds;
+
   /// Returns a shallow copy of this [QueueStatus]
   /// with some or all fields replaced by the given arguments.
   @_isc.useResult
@@ -51,6 +56,7 @@ abstract class QueueStatus
     _i8nm8tqe.QueueTicket? ticket,
     int? position,
     int? totalWaiting,
+    int? estimatedWaitSeconds,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -59,6 +65,7 @@ abstract class QueueStatus
       'ticket': ticket.toJson(),
       'position': position,
       'totalWaiting': totalWaiting,
+      'estimatedWaitSeconds': estimatedWaitSeconds,
     };
   }
 
@@ -69,6 +76,7 @@ abstract class QueueStatus
       'ticket': ticket.toJsonForProtocol(),
       'position': position,
       'totalWaiting': totalWaiting,
+      'estimatedWaitSeconds': estimatedWaitSeconds,
     };
   }
 
@@ -83,10 +91,12 @@ class _QueueStatusImpl extends QueueStatus {
     required _i8nm8tqe.QueueTicket ticket,
     required int position,
     required int totalWaiting,
+    required int estimatedWaitSeconds,
   }) : super._(
          ticket: ticket,
          position: position,
          totalWaiting: totalWaiting,
+         estimatedWaitSeconds: estimatedWaitSeconds,
        );
 
   /// Returns a shallow copy of this [QueueStatus]
@@ -97,11 +107,13 @@ class _QueueStatusImpl extends QueueStatus {
     _i8nm8tqe.QueueTicket? ticket,
     int? position,
     int? totalWaiting,
+    int? estimatedWaitSeconds,
   }) {
     return QueueStatus(
       ticket: ticket ?? this.ticket.copyWith(),
       position: position ?? this.position,
       totalWaiting: totalWaiting ?? this.totalWaiting,
+      estimatedWaitSeconds: estimatedWaitSeconds ?? this.estimatedWaitSeconds,
     );
   }
 }
